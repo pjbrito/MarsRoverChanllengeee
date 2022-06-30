@@ -5,6 +5,36 @@ namespace MarsRoverChanllengeTests
     public class ReadMarsRoverBasicInputTests
     {
         [Fact]
+        public void Move_MovingForwardFromPos_2_3_N_ResultsIn_2_4_N()
+        {
+            // arrange
+            var uut = new MarsRover();
+            var input_str = @"5 5
+2 3 N
+M";
+            // act
+            string output_str = uut.Move(input_str);
+
+            // assert
+            Assert.Equal("2 4 N", output_str);
+        }
+
+        [Fact]
+        public void Move_MovingForwardFromPos_2_3_S_ResultsIn_2_2_S()
+        {
+            // arrange
+            var uut = new MarsRover();
+            var input_str = @"5 5
+2 3 S
+M";
+            // act
+            string output_str = uut.Move(input_str);
+
+            // assert
+            Assert.Equal("2 2 S", output_str);
+        }
+
+        [Fact]
         public void Move_MovingForwardFromPos_1_1_E_ResultsIn_1_2_E()
         {
             // arrange
@@ -18,7 +48,6 @@ M";
             // assert
             Assert.Equal("2 1 E", output_str);
         }
-
 
         [Fact]
         public void MoveOneStep_MovingForwardFromPos_1_1_E_ResultsIn_1_2_E()

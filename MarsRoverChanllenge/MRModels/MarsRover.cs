@@ -58,9 +58,7 @@ namespace MarsRoverChanllenge.MRModels
                 {
                     X += -1;
                 }
-
             }
-
         }
 
         public void TryParseGridHeader(string header_str, out int length, out int height)
