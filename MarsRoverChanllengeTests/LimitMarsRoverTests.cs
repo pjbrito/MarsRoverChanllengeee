@@ -13,7 +13,7 @@ namespace MarsRoverChanllengeTests
 5 5 N
 M";
             // act
-            string output_str = uut.Move(input_str);
+            string output_str = uut.ProcessCommands(input_str);
 
             // assert
             Assert.Equal("5 5 N", output_str);
@@ -28,7 +28,7 @@ M";
 5 5 E
 M";
             // act
-            string output_str = uut.Move(input_str);
+            string output_str = uut.ProcessCommands(input_str);
 
             // assert
             Assert.Equal("5 5 E", output_str);
@@ -43,7 +43,7 @@ M";
 0 0 S
 M";
             // act
-            string output_str = uut.Move(input_str);
+            string output_str = uut.ProcessCommands(input_str);
 
             // assert
             Assert.Equal("0 0 S", output_str);
@@ -58,7 +58,7 @@ M";
 0 0 W
 M";
             // act
-            string output_str = uut.Move(input_str);
+            string output_str = uut.ProcessCommands(input_str);
 
             // assert
             Assert.Equal("0 0 W", output_str);

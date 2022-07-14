@@ -15,31 +15,16 @@ namespace MarsRoverChanllenge.MRModels
         public int Y { get; set; }
         public string Direction { get; set; }
 
-        public string TurnLeft(string input_str)
+        public string ProcessCommands(string input_str)
         {
-            if (Direction == "N")
-            {
-                Direction = "W";
-            }
-            else if (Direction == "E")
-            {
-                Direction = "N";
-            }
-
-            return $"{X} {Y} {Direction}";
-        }
-
-        public string Move(string input_str)
-        {
-            string[] headerElements = null;
-            var lines = input_str?.Split("\r\n");
+            var lines = SplitCommandLines(input_str);
             if (lines.Length >= 2)
             {
-                TryParseGridHeader(lines[0], out int _, out int _);
-                TryParseGridConfiguration(lines[1], out int _, out int _, out string _);
+                TryParseGridHeader(lines[0]);
+                TryParseGridConfiguration(lines[1]);
             }
 
-            if (lines.Length > 2 && lines[2]?.Length >= 1)
+            if (FirstRoverHasCommands(lines))
             {
                 // move
                 foreach (var move in lines[2])
@@ -48,8 +33,22 @@ namespace MarsRoverChanllenge.MRModels
                 }
             }
 
-
             return $"{X} {Y} {Direction}";
+        }
+
+        private static bool FirstRoverHasCommands(string[] lines)
+        {
+            return lines.Length > 2 && lines[2]?.Length >= 1;
+        }
+
+        private string[] SplitCommandLines(string input_str)
+        {
+            var delimiters = new char[] { '\n', '\r' };
+            if (string.IsNullOrEmpty(input_str))
+                return new string[0];
+
+            var lines = input_str.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            return lines;
         }
 
         public void MoveOneStep(string moveType)
@@ -73,12 +72,64 @@ namespace MarsRoverChanllenge.MRModels
                     X += -1;
                 }
             }
+            else if (moveType == "L")
+            {
+                TurnLeft($"{X} {Y} {Direction}");
+            }
+            else if (moveType == "R")
+            {
+                TurnRight($"{X} {Y} {Direction}");
+            }
         }
 
-        public void TryParseGridHeader(string header_str, out int length, out int height)
+        public string TurnLeft(string input_str)
         {
-            length = -1;
-            height = -1;
+            if (Direction == "N")
+            {
+                Direction = "W";
+            }
+            else if (Direction == "E")
+            {
+                Direction = "N";
+            }
+            else if (Direction == "W")
+            {
+                Direction = "S";
+            }
+            else if (Direction == "S")
+            {
+                Direction = "E";
+            }
+
+            return $"{X} {Y} {Direction}";
+        }
+
+        public string TurnRight(string input_str)
+        {
+            if (Direction == "N")
+            {
+                Direction = "E";
+            }
+            else if (Direction == "E")
+            {
+                Direction = "S";
+            }
+            else if (Direction == "W")
+            {
+                Direction = "N";
+            }
+            else if (Direction == "S")
+            {
+                Direction = "W";
+            }
+
+            return $"{X} {Y} {Direction}";
+        }
+
+        public void TryParseGridHeader(string header_str)
+        {
+            var length = -1;
+            var height = -1;
 
             var headerElements = header_str?.Split(" ");
             if (int.TryParse(headerElements[0], out length) &&
@@ -89,12 +140,12 @@ namespace MarsRoverChanllenge.MRModels
             }
         }
 
-        public void TryParseGridConfiguration(string config_str, out int x, out int y, out string direction)
+        public void TryParseGridConfiguration(string config_str)
         {
             string[] configElements = null;
-            x = -1;
-            y = -1;
-            direction = string.Empty;
+            var x = -1;
+            var y = -1;
+            var direction = string.Empty;
 
             configElements = config_str?.Split(" ");
 

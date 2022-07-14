@@ -13,7 +13,7 @@ namespace MarsRoverChanllengeTests
 2 3 N
 M";
             // act
-            string output_str = uut.Move(input_str);
+            string output_str = uut.ProcessCommands(input_str);
 
             // assert
             Assert.Equal("2 4 N", output_str);
@@ -28,7 +28,7 @@ M";
 2 3 S
 M";
             // act
-            string output_str = uut.Move(input_str);
+            string output_str = uut.ProcessCommands(input_str);
 
             // assert
             Assert.Equal("2 2 S", output_str);
@@ -43,7 +43,7 @@ M";
 1 1 E
 M";
             // act
-            string output_str = uut.Move(input_str);
+            string output_str = uut.ProcessCommands(input_str);
 
             // assert
             Assert.Equal("2 1 E", output_str);
@@ -56,7 +56,7 @@ M";
             var uut = new MarsRover();
             var input_str = @"2 2
 1 1 E";
-            uut.Move(input_str);
+            uut.ProcessCommands(input_str);
             // act
             uut.MoveOneStep("M");
 
@@ -74,7 +74,7 @@ M";
             var uut = new MarsRover();
 
             // act
-            uut.TryParseGridConfiguration(input_str, out int _, out int _, out string _);
+            uut.TryParseGridConfiguration(input_str);
 
             //TryParseGridHeader
             Assert.Equal(1, uut.X);
@@ -90,11 +90,11 @@ M";
             var uut = new MarsRover();
 
             // act
-            uut.TryParseGridHeader(input_str, out int length, out int height);
+            uut.TryParseGridHeader(input_str);
 
             //TryParseGridHeader
-            Assert.Equal(1, length);
-            Assert.Equal(2, height);
+            Assert.Equal(1, uut.MaxLength);
+            Assert.Equal(2, uut.MaxHeight);
         }
 
         [Fact]
@@ -108,11 +108,42 @@ LMLMLMLMM
 3 3 E
 MMRMMRMRRM";
             // act
-            string output_str = uut.Move(input_str);
+            string output_str = uut.ProcessCommands(input_str);
 
             // assert
             Assert.Equal("1 3 N\r\n5 1 E", output_str);
         }
+
+        [Fact]
+        public void Move_SingleRoverWithCommands_MLM_FromPosition_2_2_E_ResultsIn_3_3_N()
+        {
+            // arrange
+            var uut = new MarsRover();
+            var input_str = @"5 5
+2 2 E
+MLM";
+            // act
+            string output_str = uut.ProcessCommands(input_str);
+
+            // assert
+            Assert.Equal("3 3 N", output_str);
+        }
+
+        [Fact]
+        public void Move_SingleRoverWithCommands_MRM_FromPosition_2_2_E_ResultsIn_3_1_S()
+        {
+            // arrange
+            var uut = new MarsRover();
+            var input_str = @"5 5
+2 2 E
+MRM";
+            // act
+            string output_str = uut.ProcessCommands(input_str);
+
+            // assert
+            Assert.Equal("3 1 S", output_str);
+        }
+
 
     }
 
