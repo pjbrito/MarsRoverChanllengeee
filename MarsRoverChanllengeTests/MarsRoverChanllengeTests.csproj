@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MarsRoverChanllenge.csproj" />
     <ProjectReference Include="..\MarsRoverChanllenge\MarsRoverChanllenge.csproj" />
   </ItemGroup>
 

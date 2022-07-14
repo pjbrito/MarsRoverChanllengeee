@@ -15,6 +15,20 @@ namespace MarsRoverChanllenge.MRModels
         public int Y { get; set; }
         public string Direction { get; set; }
 
+        public string TurnLeft(string input_str)
+        {
+            if (Direction == "N")
+            {
+                Direction = "W";
+            }
+            else if (Direction == "E")
+            {
+                Direction = "N";
+            }
+
+            return $"{X} {Y} {Direction}";
+        }
+
         public string Move(string input_str)
         {
             string[] headerElements = null;
@@ -42,19 +56,19 @@ namespace MarsRoverChanllenge.MRModels
         {
             if (moveType == "M")
             {
-                if (Direction == "N")
+                if (Direction == "N" && Y < MaxHeight)
                 {
                     Y += 1;
                 }
-                else if (Direction == "E")
+                else if (Direction == "E" && X < MaxLength)
                 {
                     X += 1;
                 }
-                else if (Direction == "S")
+                else if (Direction == "S" && Y > 0)
                 {
                     Y += -1;
                 }
-                else if (Direction == "W")
+                else if (Direction == "W" && X > 0)
                 {
                     X += -1;
                 }
