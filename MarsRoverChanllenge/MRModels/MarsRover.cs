@@ -18,27 +18,30 @@ namespace MarsRoverChanllenge.MRModels
         public string ProcessCommands(string input_str)
         {
             var lines = SplitCommandLines(input_str);
-            if (lines.Length >= 2)
+            if (lines.Length >= 1)
             {
                 TryParseGridHeader(lines[0]);
-                TryParseGridConfiguration(lines[1]);
             }
 
-            if (FirstRoverHasCommands(lines))
+            var processingResult = string.Empty;
+            for (int i = 1; i < lines.Length; i+=2)
             {
-                // move
-                foreach (var move in lines[2])
+                TryParseGridConfiguration(lines[i]);    // 1
+                if (NextRoverInputHasMoves(lines, i))   // 2
                 {
-                    MoveOneStep($"{move}");
+                    foreach (var move in lines[i + 1])
+                    {
+                        MoveOneStep($"{move}");
+                    }
+                    processingResult += $"{X} {Y} {Direction}\r\n";
                 }
             }
-
-            return $"{X} {Y} {Direction}";
+            return processingResult.TrimEnd();
         }
 
-        private static bool FirstRoverHasCommands(string[] lines)
+        private static bool NextRoverInputHasMoves(string[] lines, int currentInputLine)
         {
-            return lines.Length > 2 && lines[2]?.Length >= 1;
+            return lines.Length > currentInputLine + 1;
         }
 
         private string[] SplitCommandLines(string input_str)
@@ -145,6 +148,7 @@ namespace MarsRoverChanllenge.MRModels
             string[] configElements = null;
             var x = -1;
             var y = -1;
+            CleanGlobalPositionXY();
             var direction = string.Empty;
 
             configElements = config_str?.Split(" ");
@@ -159,5 +163,12 @@ namespace MarsRoverChanllenge.MRModels
                 Direction = configElements[2];
             }
         }
+
+        private void CleanGlobalPositionXY()
+        {
+            X = -1;
+            Y = -1;
+        }
+
     }
 }
